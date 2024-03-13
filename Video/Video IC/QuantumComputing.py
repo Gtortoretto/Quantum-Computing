@@ -40,7 +40,69 @@ class Intro(Scene):
         self.wait(2)
         
         pass
+
+
+class Scene2(Scene):
     
+    def construct(self):
+        
+        self.next_section(skip_animations = False)
+        
+        # region MyRegion
+        
+        
+        #lateral_bar = Rectangle(height = config.frame_height, width = (comprimento_barra_lateral := 1.5), fill_color = "#353537", fill_opacity = 1, stroke_width = 0).to_edge(RIGHT, buff = 0)
+        
+        grey = "#353537"
+        
+        self.camera.background_color = "#ffffff"
+            
+        title = Text("bit e Quantum bit", font_size = 60).set_color(BLACK)
+        
+        self.play(Write(title), run_time = 3)
+        
+        self.wait(2) 
+        
+        self.play(title.animate.to_edge(UP, buff = 0.8), run_time = 2)
+        
+        self.wait(2) 
+                
+        separador = VGroup((rectangle_1 := Rectangle(width = (temp_height := 9), height = (temp_width := 0.07), color=grey, fill_color=grey, fill_opacity=1).round_corners(temp_width/2)), (rectangle_2 := Rectangle(width=temp_width, height =( temp_height2 := 5), color=grey, fill_color=grey, fill_opacity=1).round_corners(temp_width/2).shift(1*DOWN)))
+
+        title_upper_left = Text("Clássico", color = BLACK, font_size = 40)
+        title_upper_right = Text("Quântico", color = BLACK, font_size = 40)
+        content_bottom_left = Text("--", color = BLACK, font_size = 24)
+        content_bottom_right = Text("--", color = BLACK, font_size = 24)
+              
+        
+        title_upper_left.next_to(rectangle_1.get_left() + [temp_height/4, 0, 0], buff=-0.5).shift(0.7*UP)
+        title_upper_right.next_to(rectangle_1.get_right() - [temp_height/4, 0, 0], buff=-0.5).shift(0.7*UP)
+        content_bottom_left.next_to(rectangle_1.get_left() + [temp_height/4, 0, 0], buff=-0.5).shift(1.7*DOWN)
+        content_bottom_right.next_to(rectangle_1.get_right() - [temp_height/4, 0, 0], buff=-0.5).shift(1.7*DOWN)
+        
+        title_upper_left.next_to(Line(rectangle_1.get_left(), rectangle_1.get_center()).get_center(), buff=(title_upper_left.get_left() - title_upper_left.get_right())/2).shift(0.7*UP)
+        title_upper_right.next_to(Line(rectangle_1.get_right(), rectangle_1.get_center()).get_center(), buff=(title_upper_right.get_left() - title_upper_right.get_right())/2).shift(0.7*UP)
+        
+        
+        separator_text = VGroup(title_upper_left, title_upper_right, content_bottom_left, content_bottom_right)
+
+        title_separador = VGroup(separador, title_upper_left, title_upper_right)
+
+        total_separador = VGroup(separador, separator_text)
+
+        # Add the cross separator to the scene
+        self.play(FadeIn(title_separador), run_time = 4)
+        
+        self.wait(3)
+
+        # endregion
+        
+        self.next_section(skip_animations = False)
+
+        pass
+        
+
+
 class Basico(ThreeDScene):
     
     def construct(self):

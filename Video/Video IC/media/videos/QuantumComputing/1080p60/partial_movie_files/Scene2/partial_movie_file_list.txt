@@ -1,0 +1,7 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene2/1818364147_1776635920_223132457.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene2/1281934849_784179552_2127993161.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene2/1281934849_3785043920_1136459396.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene2/1281934849_784179552_2136773295.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene2/1281934849_1053607971_626859252.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene2/1281934849_3891874688_677763112.mp4'
