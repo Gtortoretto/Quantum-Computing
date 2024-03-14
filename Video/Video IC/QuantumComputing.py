@@ -46,7 +46,7 @@ class Scene2(Scene):
     
     def construct(self):
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -71,24 +71,13 @@ class Scene2(Scene):
 
         title_upper_left = Text("Clássico", color = BLACK, font_size = 40)
         title_upper_right = Text("Quântico", color = BLACK, font_size = 40)
-        content_bottom_left = Text("--", color = BLACK, font_size = 24)
-        content_bottom_right = Text("--", color = BLACK, font_size = 24)
-              
-        
-        title_upper_left.next_to(rectangle_1.get_left() + [temp_height/4, 0, 0], buff=-0.5).shift(0.7*UP)
-        title_upper_right.next_to(rectangle_1.get_right() - [temp_height/4, 0, 0], buff=-0.5).shift(0.7*UP)
-        content_bottom_left.next_to(rectangle_1.get_left() + [temp_height/4, 0, 0], buff=-0.5).shift(1.7*DOWN)
-        content_bottom_right.next_to(rectangle_1.get_right() - [temp_height/4, 0, 0], buff=-0.5).shift(1.7*DOWN)
         
         title_upper_left.next_to(Line(rectangle_1.get_left(), rectangle_1.get_center()).get_center(), buff=(title_upper_left.get_left() - title_upper_left.get_right())/2).shift(0.7*UP)
         title_upper_right.next_to(Line(rectangle_1.get_right(), rectangle_1.get_center()).get_center(), buff=(title_upper_right.get_left() - title_upper_right.get_right())/2).shift(0.7*UP)
         
-        
-        separator_text = VGroup(title_upper_left, title_upper_right, content_bottom_left, content_bottom_right)
 
         title_separador = VGroup(separador, title_upper_left, title_upper_right)
 
-        total_separador = VGroup(separador, separator_text)
 
         # Add the cross separator to the scene
         self.play(FadeIn(title_separador), run_time = 4)
@@ -98,7 +87,36 @@ class Scene2(Scene):
         # endregion
         
         self.next_section(skip_animations = False)
+        
+        # region MyRegion
+        
 
+        myTemplate = TexTemplate()
+        myTemplate.add_to_preamble(r"\usepackage{ragged2e}")
+
+        content_bottom_left = (VGroup(Text("0", color = BLACK, font_size = 50), Text("1", color = BLACK, font_size = 50)).arrange(DOWN, buff=0.5))
+        #content_bottom_right = (VGroup(Tex(r"\ket{0}", color = BLACK, font_size = 50), Text("1", color = BLACK, font_size = 50)).arrange(DOWN, buff=0.5))
+        content_bottom_right = VGroup(Tex(r"$|0\rangle$", color = BLACK, font_size = 75), Tex(r"$|1\rangle$", color = BLACK, font_size = 75)).arrange(DOWN, buff=0.5)
+        
+        content_bottom_left.next_to(rectangle_1.get_left() + [temp_height/4, 0, 0], buff=-0.5).shift(1.7*DOWN)
+        content_bottom_right.next_to(rectangle_1.get_right() - [temp_height/4, 0, 0], buff=-0.5).shift(1.7*DOWN)
+        
+        separator_text = VGroup(title_upper_left, title_upper_right, content_bottom_left, content_bottom_right)
+        
+        total_separador = VGroup(separador, separator_text)
+        
+        
+        self.play(FadeIn(content_bottom_left), run_time = 3)
+        self.wait(2)
+        self.play(FadeIn(content_bottom_right), run_time = 3)
+        
+        
+        
+        self.wait(2)
+        
+        # endregion
+        
+        
         pass
         
 
