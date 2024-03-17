@@ -86,13 +86,13 @@ class Scene2(Scene):
 
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
 
         myTemplate = TexTemplate()
-        myTemplate.add_to_preamble(r"\usepackage{ragged2e}")
+        myTemplate.add_to_preamble(r"\usepackage{braket}")
 
         content_bottom_left = (VGroup(Text("0", color = BLACK, font_size = 50), Text("1", color = BLACK, font_size = 50)).arrange(DOWN, buff=0.5))
         #content_bottom_right = (VGroup(Tex(r"\ket{0}", color = BLACK, font_size = 50), Text("1", color = BLACK, font_size = 50)).arrange(DOWN, buff=0.5))
@@ -116,7 +116,78 @@ class Scene2(Scene):
         
         # endregion
         
+        self.next_section(skip_animations = False)
         
+        # region MyRegion
+        
+        title_2 = Text("Qubit", font_size = 60).set_color(BLACK).to_edge(UP, buff = 0.8)
+        
+        m_superposition = MathTex(r"| \psi \rangle =", r"\alpha ", r"|0 \rangle +", r"\beta", r" |1 \rangle", color = BLACK, font_size = 75)
+        m_superposition_2 = MathTex(r"\alpha, \beta \in \mathbb{C}", color = BLACK, font_size = 60).next_to(m_superposition, DOWN, buff=1)
+        
+        vgroup_superposition = VGroup(m_superposition, m_superposition_2)
+        
+        self.play(FadeOut(total_separador, title), run_time = 3)
+        self.play(AnimationGroup(FadeIn(title_2), Write(m_superposition)), run_time = 3)
+        self.play(FadeIn(m_superposition_2), run_time = 2)
+        
+        self.wait(3)
+        
+        self.play(FadeOut(vgroup_superposition), run_time = 2)
+        
+        axes = Axes(x_range = (-5, 5), y_range = (-5, 5), x_length = 5, y_length = 5, axis_config = {"color": BLACK, "include_tip": True, "tip_height": (temp_valor := 0.26), "tip_width" : temp_valor}).add_coordinates()
+        plane = NumberPlane(x_range = (-5, 5), y_range = (-5, 5), x_length = 5, y_length = 5, background_line_style={"stroke_opacity": 0.3})
+        
+        #lable = axes.get_axis_labels(Tex("$\ket{1}$", color = BLACK, font_size = 60, tex_template=myTemplate), Tex("$\ket{0}$", color = BLACK, font_size = 60, tex_template=myTemplate))
+        
+        x_label = Tex("$\ket{1}$", color = BLACK, font_size = 60, tex_template=myTemplate).scale(0.8)
+        y_label = Tex("$\ket{0}$", color = BLACK, font_size = 60, tex_template=myTemplate).scale(0.8)
+
+        x_label.next_to(axes.get_x_axis(), RIGHT, buff=0.1).shift(0.2*UP)
+        y_label.next_to(axes.get_y_axis(), UP, buff=0.1).shift(0.3*RIGHT)
+        
+        lable = VGroup(x_label, y_label)        
+        
+        grafico = VGroup(plane, axes, lable).shift(0.9*DOWN)
+        
+        self.play(FadeIn(grafico), run_time = 2)
+        
+        m_superposition_new = m_superposition.copy().scale(0.8).to_edge(RIGHT, buff = 1)
+        
+        self.play(AnimationGroup(grafico.animate.shift(2.7*LEFT), FadeIn(m_superposition_new)), run_time = 2)
+        
+        ponto_coords = (random.uniform(2, 3), random.uniform(2, 3))
+        
+        ponto = Dot(axes.c2p(*(ponto_coords)), color = "#be4720")
+        
+        self.play(FadeIn(ponto))
+        
+        self.play(AnimationGroup(Indicate(m_superposition_new[1], color = "#be4720"), Flash(m_superposition_new[1], color = "#be4720", flash_radius = 0.3)))
+        
+        self.play(AnimationGroup(Write(alpha_1 := DashedLine(ponto.get_center(), axes.c2p(ponto_coords[0], 0), color = BLACK)), (alpha := m_superposition_new[1].copy()).animate.next_to(axes.c2p(ponto_coords[0], 0), DOWN), lag_ratio=0.1), run_time = 2)        
+        
+        self.play(AnimationGroup(Indicate(m_superposition_new[3], color = "#be4720"), Flash(m_superposition_new[3], color = "#be4720", flash_radius = 0.3)))
+        
+        self.play(AnimationGroup(Write(beta_1 := DashedLine(ponto.get_center(), axes.c2p(0, ponto_coords[1]), color = BLACK)), (beta := m_superposition_new[3].copy()).animate.next_to(axes.c2p(0, ponto_coords[1]), LEFT), lag_ratio=0.1), run_time = 2)
+        
+        self.wait(0.5)
+        
+        vetor = Arrow(start = axes.c2p(0, 0), end = axes.c2p(*ponto_coords), color = "#be4720", buff=0)
+        
+        vetor_text = Tex(r"$\ket{\psi}$", color = BLACK, font_size = 60, tex_template=myTemplate).next_to(vetor, RIGHT, buff=0.2)
+        
+        self.play(AnimationGroup(FadeOut(VGroup(alpha_1, alpha, beta_1, beta)), FadeIn(vetor), Write(vetor_text), lag_ratio=0.2), run_time = 2)
+        
+        self.wait(5)
+        
+        # endregion
+        
+        self.next_section(skip_animations = False)
+        
+        # region MyRegion
+        
+        
+        # endregion
         pass
         
 
