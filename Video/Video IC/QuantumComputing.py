@@ -116,13 +116,13 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
         title_2 = Text("Qubit", font_size = 60).set_color(BLACK).to_edge(UP, buff = 0.8)
         
-        m_superposition = MathTex(r"| \psi \rangle =", r"\alpha ", r"|0 \rangle +", r"\beta", r" |1 \rangle", color = BLACK, font_size = 75)
+        m_superposition = MathTex(r"| \psi \rangle =", r"\alpha ", r"|0 \rangle", r" +", r"\beta", r" |1 \rangle", color = BLACK, font_size = 75)
         m_superposition_2 = MathTex(r"\alpha, \beta \in \mathbb{C}", color = BLACK, font_size = 60).next_to(m_superposition, DOWN, buff=1)
         
         vgroup_superposition = VGroup(m_superposition, m_superposition_2)
@@ -166,7 +166,7 @@ class Scene2(Scene):
         
         self.play(AnimationGroup(Write(alpha_1 := DashedLine(ponto.get_center(), axes.c2p(ponto_coords[0], 0), color = BLACK)), (alpha := m_superposition_new[1].copy()).animate.next_to(axes.c2p(ponto_coords[0], 0), DOWN), lag_ratio=0.1), run_time = 2)        
         
-        self.play(AnimationGroup(Indicate(m_superposition_new[3], color = "#be4720"), Flash(m_superposition_new[3], color = "#be4720", flash_radius = 0.3)))
+        self.play(AnimationGroup(Indicate(m_superposition_new[4], color = "#be4720"), Flash(m_superposition_new[4], color = "#be4720", flash_radius = 0.3)))
         
         self.play(AnimationGroup(Write(beta_1 := DashedLine(ponto.get_center(), axes.c2p(0, ponto_coords[1]), color = BLACK)), (beta := m_superposition_new[3].copy()).animate.next_to(axes.c2p(0, ponto_coords[1]), LEFT), lag_ratio=0.1), run_time = 2)
         
@@ -180,11 +180,39 @@ class Scene2(Scene):
         
         self.wait(5)
         
+        vgroup_grafico = VGroup(grafico, ponto, vetor, vetor_text, alpha_1, alpha, beta_1, beta)
+        
         # endregion
         
         self.next_section(skip_animations = False)
         
         # region MyRegion
+        
+        #self.play(AnimationGroup(FadeOut(vgroup_grafico), m_superposition_new.animate.move_to(ORIGIN, aligned_edge=UP), lag_ratio = 0.5), run_time = 2.5)
+    
+        self.play(AnimationGroup(Indicate(m_superposition_new[2], color = "#be4720"), Flash(m_superposition_new[2], color = "#be4720", flash_radius = 0.3)))    
+        self.play(AnimationGroup(Indicate(m_superposition_new[5], color = "#be4720"), Flash(m_superposition_new[5], color = "#be4720", flash_radius = 0.3)))    
+            
+        
+        #self.play(FadeIn(arrow_zero := Arrow(start = (zero := m_superposition_new[2].copy()).get_center(), end = (temp_end := m_superposition_new[2].get_center() + [-1.5, -2, 0]), color = BLACK, buff=0.7)), run_time = 1)   
+        
+        #new_zero = Tex(r"$|\alpha|^2$", color = BLACK, font_size = 75, tex_template=myTemplate).scale(0.8).next_to(arrow_zero, DOWN, buff=0.2)
+        
+        #self.play(ReplacementTransform(zero, new_zero), run_time = 1)
+        
+        #self.play(Transform(zero, Tex(r"$|\alpha|^2$", color = BLACK, font_size = 75, tex_template=myTemplate).scale(0.8).next_to(arrow_zero, DOWN, buff=0.2)), run_time = 1)
+        
+        self.play(AnimationGroup((FadeIn(arrow_zero := Arrow(start = (zero := m_superposition_new[2].copy()).get_center(), end = m_superposition_new[2].get_center() + [0, -2, 0], color = BLACK, buff=0.7))), Transform(zero, Tex(r"$|\alpha|^2$", color = BLACK, font_size = 75, tex_template=myTemplate).scale(0.8).next_to(arrow_zero, DOWN, buff=0.2)), lag_ratio=0.1), run_time = 2)
+        
+        self.play(AnimationGroup((FadeIn(arrow_one := Arrow(start = (one := m_superposition_new[5].copy()).get_center(), end = m_superposition_new[5].get_center() + [0, -2, 0], color = BLACK, buff=0.7))), Transform(one, Tex(r"$|\beta|^2$", color = BLACK, font_size = 75, tex_template=myTemplate).scale(0.8).next_to(arrow_one, DOWN, buff=0.2)), lag_ratio=0.1), run_time = 2)
+        
+        vgroup_zero_one = VGroup(arrow_zero, zero, arrow_one, one)
+        
+        self.play(AnimationGroup(FadeOut(vgroup_zero_one), Write((prob := MathTex(r"|\alpha|^2 + |\beta|^2 = 1", color = BLACK, font_size = 60, tex_template=myTemplate).scale(0.8).next_to(arrow_zero, DOWN))), lag_ratio = 0.5), run_time = 2.5)
+        
+        
+        
+        self.wait(2)
         
         
         # endregion
