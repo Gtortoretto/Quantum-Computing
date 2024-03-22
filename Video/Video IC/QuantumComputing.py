@@ -1,4 +1,5 @@
 from manim import *
+import numpy as np
 import random
 import math
 
@@ -180,7 +181,7 @@ class Scene2(Scene):
         
         self.wait(5)
         
-        vgroup_grafico = VGroup(grafico, ponto, vetor, vetor_text, alpha_1, alpha, beta_1, beta)
+        vgroup_grafico = VGroup(grafico, ponto, vetor, vetor_text)
         
         # endregion
         
@@ -210,7 +211,34 @@ class Scene2(Scene):
         
         self.play(AnimationGroup(FadeOut(vgroup_zero_one), Write((prob := MathTex(r"|\alpha|^2 + |\beta|^2 = 1", color = BLACK, font_size = 60, tex_template=myTemplate).scale(0.8).next_to(arrow_zero, DOWN))), lag_ratio = 0.5), run_time = 2.5)
         
+        self.play(FadeOut(vetor, vetor_text), run_time = 2)
         
+        linha = Line(start = axes.c2p(0, 0), end = axes.c2p(*ponto_coords), color = BLACK, stroke_width = 4, buff = 0.05)
+        linha_text = Text(r"1", color = BLACK, font_size = 40).next_to(linha, RIGHT, buff=0.2)
+        
+        self.play(AnimationGroup(FadeIn(linha), Write(linha_text), lag_ratio = 0.2), run_time = 2)
+        
+        self.play(FadeOut(linha_text), run_time = 2)
+        
+        path_circulo = Circle(radius = (raio := np.linalg.norm(np.array(ponto_coords)))).move_to(axes.c2p(*ponto_coords))
+        
+        
+        k = ValueTracker(temp_valor_inicial := math.atan2(ponto_coords[1], ponto_coords[0]))
+        
+        linha_path = always_redraw(lambda : Line(start = axes.c2p(0, 0), end = axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])), color = BLACK, stroke_width = 4, buff = 0.05))
+                
+        def circle_func(t):
+            return axes.c2p(*raio * np.array([np.cos(t), np.sin(t)]))
+        
+        circunferencia_path = always_redraw(lambda: axes.add(ParametricFunction(circle_func, t_range=[temp_valor_inicial, k.get_value()], color=BLACK)))
+           
+        ponto_path = always_redraw(lambda : Dot(axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])), color = "#be4720"))
+        
+        self.remove(linha, ponto)
+        
+        self.add(linha_path, circunferencia_path, ponto_path)
+        
+        self.play(k.animate.set_value(temp_valor_inicial + 2*PI), rate_func = linear, run_time = 4)
         
         self.wait(2)
         
