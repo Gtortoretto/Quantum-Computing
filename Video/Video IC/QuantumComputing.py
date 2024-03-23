@@ -47,7 +47,7 @@ class Scene2(Scene):
     
     def construct(self):
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -87,7 +87,7 @@ class Scene2(Scene):
 
         # endregion
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -117,7 +117,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -136,7 +136,7 @@ class Scene2(Scene):
         
         self.play(FadeOut(vgroup_superposition), run_time = 2)
         
-        axes = Axes(x_range = (-5, 5), y_range = (-5, 5), x_length = 5, y_length = 5, axis_config = {"color": BLACK, "include_tip": True, "tip_height": (temp_valor := 0.26), "tip_width" : temp_valor}).add_coordinates()
+        axes = Axes(x_range = (-5, 5), y_range = (-5, 5), x_length = 5, y_length = 5, axis_config = {"color": BLACK, "include_tip": True, "tip_height": (temp_valor := 0.26), "tip_width" : temp_valor})
         plane = NumberPlane(x_range = (-5, 5), y_range = (-5, 5), x_length = 5, y_length = 5, background_line_style={"stroke_opacity": 0.3})
         
         #lable = axes.get_axis_labels(Tex("$\ket{1}$", color = BLACK, font_size = 60, tex_template=myTemplate), Tex("$\ket{0}$", color = BLACK, font_size = 60, tex_template=myTemplate))
@@ -169,7 +169,7 @@ class Scene2(Scene):
         
         self.play(AnimationGroup(Indicate(m_superposition_new[4], color = "#be4720"), Flash(m_superposition_new[4], color = "#be4720", flash_radius = 0.3)))
         
-        self.play(AnimationGroup(Write(beta_1 := DashedLine(ponto.get_center(), axes.c2p(0, ponto_coords[1]), color = BLACK)), (beta := m_superposition_new[3].copy()).animate.next_to(axes.c2p(0, ponto_coords[1]), LEFT), lag_ratio=0.1), run_time = 2)
+        self.play(AnimationGroup(Write(beta_1 := DashedLine(ponto.get_center(), axes.c2p(0, ponto_coords[1]), color = BLACK)), (beta := m_superposition_new[4].copy()).animate.next_to(axes.c2p(0, ponto_coords[1]), LEFT), lag_ratio=0.1), run_time = 2)
         
         self.wait(0.5)
         
@@ -225,6 +225,8 @@ class Scene2(Scene):
         
         k = ValueTracker(temp_valor_inicial := math.atan2(ponto_coords[1], ponto_coords[0]))
         
+        """
+        
         linha_path = always_redraw(lambda : Line(start = axes.c2p(0, 0), end = axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])), color = BLACK, stroke_width = 4, buff = 0.05))
                 
         def circle_func(t):
@@ -240,20 +242,91 @@ class Scene2(Scene):
         
         self.play(k.animate.set_value(temp_valor_inicial + 2*PI), rate_func = linear, run_time = 4)
         
+        """
+        def circle_func(t):
+            return axes.c2p(*raio * np.array([np.cos(t), np.sin(t)]))
+        
+         
+        linha_path = Line(start=axes.c2p(0, 0), end=axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])), color=BLACK, stroke_width=4, buff=0.05)
+        
+        circunferencia_path = ParametricFunction(circle_func, t_range=[temp_valor_inicial, temp_valor_inicial], color=BLACK)
+        
+        ponto_path = Dot(axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])), color="#be4720")
+
+
+        def update_line(mob):
+            mob.become(Line(start=axes.c2p(0, 0), end=axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])), color=BLACK, stroke_width=4, buff=0.05))
+
+        def update_circunferencia(mob):
+            mob.become(ParametricFunction(circle_func, t_range=[temp_valor_inicial, k.get_value()], color=BLACK))
+
+        def update_dot(mob):
+            mob.move_to(axes.c2p(*raio*np.array([np.cos(k.get_value()), np.sin(k.get_value())])))
+
+        linha_path.add_updater(update_line)
+        circunferencia_path.add_updater(update_circunferencia)
+        ponto_path.add_updater(update_dot)
+
+        self.remove(linha, ponto)
+
+        self.add(linha_path, circunferencia_path, ponto_path)
+
+        self.play(k.animate.set_value(temp_valor_inicial + 2*PI), rate_func=linear, run_time=4)
+
+        linha_path.remove_updater(update_line)
+        circunferencia_path.remove_updater(update_circunferencia)
+        ponto_path.remove_updater(update_dot)
+        
         self.wait(2)
         
         
         # endregion
+        
+        self.next_section(skip_animations = False)
+        
+        # region MyRegion
+        
+        self.wait()
+        
+        self.play(AnimationGroup(FadeOut(circunferencia_path, ponto_path, linha_path, grafico, prob), m_superposition_new.animate.scale(1.2).move_to(ORIGIN, aligned_edge=UP), lag_ratio=1), run_time = 3)
+        
+        self.wait(2)
+        
+        
+        # endregion
+        
+        
         pass
         
 
 
+class Test(Scene):
+        
+        def construct(self):
+        
+            ponto_coords = (random.uniform(2, 3), random.uniform(2, 3))
+            
+            path_circulo = Circle(radius = (raio := np.linalg.norm(np.array(ponto_coords))))
+            
+            k = ValueTracker(temp_valor_inicial := math.atan2(ponto_coords[1], ponto_coords[0]))
+                    
+            def circle_func(t):
+                return raio*np.cos(t), raio*np.sin(t), 0
+            
+            circunferencia_path = always_redraw(lambda: ParametricFunction(circle_func, t_range=[temp_valor_inicial, k.get_value()]))
+            
+            self.play(FadeIn(circunferencia_path))
+            
+            self.play(k.animate.set_value(temp_valor_inicial + 2*PI), rate_func = linear, run_time = 4)
+            
+            self.play(FadeOut(circunferencia_path))
+            
+            self.wait()
+            
+
 class Basico(ThreeDScene):
     
     def construct(self):
-        
-        
-        
         
         self.set_camera_orientation(phi=75*DEGREES, theta=0)
 
