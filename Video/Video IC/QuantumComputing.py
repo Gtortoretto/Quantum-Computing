@@ -314,6 +314,8 @@ class Scene2(Scene):
         
         m_superposition_new_1 = MathTex(r"| \psi \rangle =", r"e^{i \theta_0}",r"( r_0 |0 \rangle", r" +", r"r_1 e^{i (\theta_1 - \theta_0)}", r" |1 \rangle )", color = BLACK, font_size = 75)
         
+        m_superposition_new_1.save_state()
+        
         self.wait(2)
         
         self.play(TransformMatchingTex(m_superposition_new, m_superposition_new_1), run_time = 2)
@@ -340,7 +342,7 @@ class Scene2(Scene):
         
         self.wait()
         
-        self.play(AnimationGroup(ReplacementTransform(m_superposition_new_1, m_superposition_new_1_scale), ReplacementTransform(m_superposition_new_2_new, m_superposition_new_2_scale), lag_ratio = 0), run_time = 2)
+        self.play(AnimationGroup(Transform(m_superposition_new_1, m_superposition_new_1_scale), ReplacementTransform(m_superposition_new_2_new, m_superposition_new_2_scale), lag_ratio = 0), run_time = 2)
         
         self.wait()
         
@@ -350,18 +352,57 @@ class Scene2(Scene):
         
         self.wait()
         
-        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"\Braket{e^{i \theta_0}\psi ' |\mathcal{O}|e^{-i \theta_0}\psi '}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
+        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"\Braket{e^{i \theta_0}\psi |\mathcal{O}|e^{-i \theta_0}\psi }", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
         
         self.wait()
         
-        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"e^{i \theta_0}e^{-i \theta_0}\Braket{\psi ' |\mathcal{O}|\psi '}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
+        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"e^{i \theta_0}e^{-i \theta_0}\Braket{\psi  |\mathcal{O}|\psi }", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
         
         self.wait(1)
         
-        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"e^{i \theta_0}e^{-i \theta_0}\Braket{\psi ' |\mathcal{O}|\psi '}", r"= \Braket{\psi|\mathcal{O}|\psi}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
+        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"e^{i \theta_0}e^{-i \theta_0}\Braket{\psi  |\mathcal{O}|\psi }", r"= \Braket{\psi|\mathcal{O}|\psi}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
         
+        self.wait()
         
-                
+        self.play(AnimationGroup(FadeOut(expectation_value), FadeOut(m_superposition_new_2_scale), Restore(m_superposition_new_1), lag_ratio = 0.6), run_time = 3.7)
+    
+        self.wait()
+
+        self.play(TransformMatchingTex(m_superposition_new_1, (m_superposition_final := MathTex(r"| \psi \rangle =",r" r_0 |0 \rangle", r" +", r"r_1 e^{i (\theta_1 - \theta_0)}", r" |1 \rangle", color = BLACK, font_size = 75))), run_time = 2)
+        
+        delta = MathTex(r"\delta = \theta_1 - \theta_0", color = BLACK, font_size = 60).next_to(m_superposition_final, DOWN, buff=1.5)
+        
+        self.wait()
+        
+        self.play(Write(delta), run_time = 2)
+        
+        self.wait()
+        
+        self.play(AnimationGroup(TransformMatchingTex(m_superposition_final, (m_superposition_final := MathTex(r"| \psi \rangle =",r" r_0 |0 \rangle", r" +", r"r_1 e^{i \delta}", r" |1 \rangle", color = BLACK, font_size = 75))), FadeOut(delta), lag_ratio = 0.5), run_time = 2)
+        
+        self.wait()
+        
+        m_superposition_final_2 = MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"1", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5)
+        
+        self.play(Write(m_superposition_final_2), run_time = 2)
+        
+        self.wait()
+        
+        self.play(TransformMatchingTex(m_superposition_final_2, (m_superposition_final_2 := MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"1", r"\quad ; \quad", r"r_1 e^{i\delta}", r"\in \mathbb{C}", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5))), run_time = 2)
+        
+        self.wait()
+        
+        self.play(TransformMatchingTex(m_superposition_final_2, (m_superposition_final_2 := MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"1", r"\quad ; \quad", r"r_1 e^{i\delta}", r" = x + yi", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5))), run_time = 2)
+        
+        self.wait()
+        
+        self.play(FadeOut(m_superposition_final_2), run_time = 2)
+        
+        m_superposition_final_2 = MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"1", r"\quad ; \quad", r"r_1 e^{i\delta}", r" = x + yi", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5)
+        
+        self.play()
+
+        
         self.wait(2) 
         
         
