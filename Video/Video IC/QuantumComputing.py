@@ -47,7 +47,7 @@ class Scene2(Scene):
     
     def construct(self):
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -87,7 +87,7 @@ class Scene2(Scene):
 
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -117,7 +117,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -185,7 +185,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -288,9 +288,81 @@ class Scene2(Scene):
         
         self.wait()
         
-        self.play(AnimationGroup(FadeOut(circunferencia_path, ponto_path, linha_path, grafico, prob), m_superposition_new.animate.scale(1.2).move_to(ORIGIN, aligned_edge=UP), lag_ratio=1), run_time = 3)
+        m_superposition = MathTex(r"| \psi \rangle =", r"\alpha ",r"|0 \rangle", r" +", r"\beta", r" |1 \rangle", color = BLACK, font_size = 75)
+        
+        self.play(AnimationGroup(FadeOut(circunferencia_path, ponto_path, linha_path, grafico, prob), ReplacementTransform(m_superposition_new, m_superposition.scale(1.2).to_edge(UP, buff = 3.4)), lag_ratio=0.7), run_time = 3)
+        
+        m_superposition_2 = MathTex(r"\alpha, \beta \in ", r"\mathbb{C}", color = BLACK, font_size = 60).next_to(m_superposition, DOWN, buff=1.5)
+        
+        self.play(FadeIn(m_superposition_2), run_time = 2)
+        
+        self.play(AnimationGroup(Indicate(m_superposition_2[1], color = "#be4720"), Flash(m_superposition_2[1], color = "#be4720", flash_radius = 0.3)))
+        
+        self.wait()
+        
+        m_complexo = MathTex(r"Z = ", r"a + i b", color = BLACK, font_size = 60).next_to(m_superposition, DOWN, buff=1.5)
+        
+        self.play(AnimationGroup(FadeOut(m_superposition_2), Write(m_complexo), lag_ratio = 1), run_time = 2)
+        
+        self.wait()
+        
+        self.play(Transform(m_complexo[1], MathTex(r"re^{i \theta}", color = BLACK, font_size = 60).align_to(m_complexo[1], LEFT).align_to(m_complexo[0], DOWN)), run_time = 2)
+        
+        m_superposition_new = MathTex(r"| \psi \rangle =", r"r_0 e^{i \theta_0}",r"|0 \rangle", r" +", r"r_1 e^{i \theta_1}", r" |1 \rangle", color = BLACK, font_size = 75)
+        
+        self.play(TransformMatchingTex(m_superposition, m_superposition_new), run_time = 2)
+        
+        m_superposition_new_1 = MathTex(r"| \psi \rangle =", r"e^{i \theta_0}",r"( r_0 |0 \rangle", r" +", r"r_1 e^{i (\theta_1 - \theta_0)}", r" |1 \rangle )", color = BLACK, font_size = 75)
         
         self.wait(2)
+        
+        self.play(TransformMatchingTex(m_superposition_new, m_superposition_new_1), run_time = 2)
+        
+        self.wait()
+        
+        self.play(AnimationGroup(Indicate(m_superposition_new_1[1], color = "#be4720"), Flash(m_superposition_new_1[1], color = "#be4720", flash_radius = 0.6)), FadeOut(m_complexo), run_time = 2)
+        
+        self.wait()
+        
+        m_superposition_new_2_new = MathTex(r"| \psi ' \rangle =", r"r_0 |0 \rangle", r" +", r"r_1 e^{i (\theta_1 - \theta_0)}", r" |1 \rangle", color = BLACK, font_size = 75).next_to(m_superposition_new_1, DOWN, buff=1.5).shift(0.7*UP)
+        
+        m_superposition_new_2 = MathTex(r"| \psi ' \rangle =", r"e^{-i \theta_0}| \psi \rangle", color = BLACK, font_size = 75).next_to(m_superposition_new_1, DOWN, buff=1.5)
+        
+        self.play(AnimationGroup(m_superposition_new_1.animate.shift(0.7*UP), Write(m_superposition_new_2.shift(0.7*UP))), run_time = 2)
+        
+        self.wait(2)
+        
+        self.play(TransformMatchingTex(m_superposition_new_2, m_superposition_new_2_new), run_time = 2)
+
+        m_superposition_new_1_scale = m_superposition_new_1.copy().scale(0.60).to_edge(LEFT, buff = 0.63).shift(0.3*DOWN)
+        
+        m_superposition_new_2_scale = m_superposition_new_2_new.copy().scale(0.60).to_edge(RIGHT, buff = 0.63).align_to(m_superposition_new_1_scale, DOWN)
+        
+        self.wait()
+        
+        self.play(AnimationGroup(ReplacementTransform(m_superposition_new_1, m_superposition_new_1_scale), ReplacementTransform(m_superposition_new_2_new, m_superposition_new_2_scale), lag_ratio = 0), run_time = 2)
+        
+        self.wait()
+        
+        expectation_value = MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN)
+        
+        self.play(Write(expectation_value), run_time = 2)
+        
+        self.wait()
+        
+        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"\Braket{e^{i \theta_0}\psi ' |\mathcal{O}|e^{-i \theta_0}\psi '}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
+        
+        self.wait()
+        
+        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"e^{i \theta_0}e^{-i \theta_0}\Braket{\psi ' |\mathcal{O}|\psi '}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
+        
+        self.wait(1)
+        
+        self.play(TransformMatchingTex(expectation_value, (expectation_value := MathTex(r"\Braket{\psi '|\mathcal{O}|\psi '}", r"=", r"e^{i \theta_0}e^{-i \theta_0}\Braket{\psi ' |\mathcal{O}|\psi '}", r"= \Braket{\psi|\mathcal{O}|\psi}", color = BLACK, font_size = 60, tex_template = myTemplate).shift(1.7*DOWN))), run_time = 2)
+        
+        
+                
+        self.wait(2) 
         
         
         # endregion
