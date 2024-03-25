@@ -282,7 +282,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -398,16 +398,74 @@ class Scene2(Scene):
         
         self.play(FadeOut(m_superposition_final_2), run_time = 2)
         
-        m_superposition_final_2 = MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"1", r"\quad ; \quad", r"r_1 e^{i\delta}", r" = x + yi", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5)
+        m_superposition_final_2 = MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"r_0^2",r"+",r"(x + iy)^*(x + iy)", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5)
         
-        self.play()
+        self.play(Write(m_superposition_final_2), run_time = 2)
+        
+        self.wait()
+        
+        self.play(TransformMatchingTex(m_superposition_final_2, (m_superposition_final_2 := MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"r_0^2",r"+",r"(x-iy)(x+iy)", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5))), run_time = 2)
 
+        self.wait()
+        
+        self.play(TransformMatchingTex(m_superposition_final_2, (m_superposition_final_2 := MathTex(r"|r_0|^2", r"+", r"|r_1 e^{i\delta}|^2", r"=", r"r_0^2",r"+",r"x^2 + y^2", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5))), run_time = 2)
+        
+        self.wait()
+        
+        self.play(AnimationGroup(FadeOut(m_superposition_final_2), Write(m_superposition_final_2 := MathTex(r"\therefore \quad ", r"r_0^2 ", r"+ x^2 + y^2 = 1", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5)), lag_ratio = 1), run_time = 4)
+
+        self.wait()
+        
+        self.play(TransformMatchingTex(m_superposition_final_2, (m_superposition_final_2 := MathTex(r"\therefore \quad ", r"z^2", r"+ x^2 + y^2 = 1", r"\quad ; \quad r_0 \equiv z", color = BLACK, font_size = 75, tex_template=myTemplate).next_to(m_superposition_final, DOWN, buff=1.5))), run_time = 2)
+
+        self.wait(2)
+        
+        self.play(AnimationGroup(FadeOut(m_superposition_final_2, m_superposition_final), Transform(title_2, (title_2 := Text("Esfera de Bloch", font_size = 60).set_color(BLACK).to_edge(UP, buff = 0.8))), lag_ratio = 1), run_time = 2)
+        
         
         self.wait(2) 
         
         
         # endregion
         
+        self.next_section(skip_animations = False)
+        
+        # region MyRegion
+        
+        titulo_3 = Text("Coordenadas Esféricas :", font_size = 36).set_color(BLACK).next_to(title_2, DOWN, buff = 1.5).to_edge(LEFT, buff = 1)
+                
+        self.play(Write(titulo_3), run_time = 2)
+        
+        coordenadas_esfericas = VGroup(
+            
+            MathTex(r"x = r \sin(\theta) \cos(\phi)", color = BLACK, font_size = 60, tex_template=myTemplate).next_to(titulo_3, DOWN, buff=1.5),
+            
+            MathTex(r"y = r \sin(\theta) \sin(\phi)", color = BLACK, font_size = 60, tex_template=myTemplate),
+            
+            MathTex(r"z = r \cos(\theta)", color = BLACK, font_size = 60, tex_template=myTemplate)
+            
+        ).arrange(DOWN, aligned_edge=LEFT, buff = 1).next_to(titulo_3, RIGHT, aligned_edge=UP, buff=1).shift(0.1*UP)
+        
+        for a in coordenadas_esfericas:
+            self.play(Write(a), run_time = 1.5)
+        
+        self.wait(2)
+        
+        self.play(AnimationGroup(FadeOut(titulo_3), coordenadas_esfericas.animate.scale(0.8).to_edge(LEFT, buff = 0.8), lag_ratio = 0.6), run_time = 2)
+        
+        #self.play
+        
+        m_superposition_final = MathTex(r"\ket{\psi}",r"=",r"r_0",r"\ket{0}",r"+",r"r_1e^{i\delta}",r"\ket{1}", color = BLACK, tex_template=myTemplate, font_size = 70).move_to(coordenadas_esfericas.get_center()).to_edge(RIGHT, buff = 0.8)
+        
+        self.play(Write(m_superposition_final), run_time = 2)
+        
+        self.play(TransformMatchingTex(m_superposition_final, (m_superposition_final := MathTex(r"\ket{\psi}",r"=",r"z",r"\ket{0}",r"+",r"(x + yi)",r"\ket{1}", color = BLACK, tex_template=myTemplate, font_size = 70).move_to(coordenadas_esfericas.get_center()).to_edge(RIGHT, buff = 0.5))), run_time = 2)
+        
+        self.wait()
+        
+        self.wait(2)
+        
+        # endregion
         
         pass
         
