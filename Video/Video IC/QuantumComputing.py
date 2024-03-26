@@ -463,6 +463,18 @@ class Scene2(Scene):
         
         self.wait()
         
+        formula_final = MathTex(r"\ket{\psi}",r"=",r"\cos{\frac{\theta}{2}}",r"\ket{0}",r"+",r"e^{i\phi}\sin{\frac{\theta}{2}}",r"\ket{1}", color = BLACK, font_size = 60, tex_template=myTemplate)
+        
+        self.play(AnimationGroup(FadeOut(m_superposition_final, coordenadas_esfericas), Write(formula_final), lag_ratio = 1), run_time = 2.5)
+        
+        raio_final = MathTex(r"r = 1}", color = BLACK, font_size = 60, tex_template=myTemplate).next_to(formula_final, DOWN, buff=1.5)
+        
+        self.play(Write(raio_final), run_time = 2)
+        
+        self.wait()
+        
+        self.play(FadeOut(raio_final), run_time =2)
+        
         self.wait(2)
         
         # endregion
@@ -471,28 +483,33 @@ class Scene2(Scene):
         
 
 
-class Test(Scene):
+class Scene3D(ThreeDScene):
         
         def construct(self):
+
+            self.next_section(skip_animations = False)
+            
+            # region MyRegion
+    
+            self.camera.background_color = "#ffffff"
         
-            ponto_coords = (random.uniform(2, 3), random.uniform(2, 3))
+            titulo = Text("Esfera de Bloch", font_size = 60).set_color(BLACK).to_edge(UP, buff = 0.8)
+        
+            myTemplate = TexTemplate()
+            myTemplate.add_to_preamble(r"\usepackage{braket}")
+    
+            formula_final = MathTex(r"\ket{\psi}",r"=",r"\cos{\frac{\theta}{2}}",r"\ket{0}",r"+",r"e^{i\phi}\sin{\frac{\theta}{2}}",r"\ket{1}", color = BLACK, font_size = 60, tex_template=myTemplate)
             
-            path_circulo = Circle(radius = (raio := np.linalg.norm(np.array(ponto_coords))))
+            self.add(titulo, formula_final)
             
-            k = ValueTracker(temp_valor_inicial := math.atan2(ponto_coords[1], ponto_coords[0]))
-                    
-            def circle_func(t):
-                return raio*np.cos(t), raio*np.sin(t), 0
             
-            circunferencia_path = always_redraw(lambda: ParametricFunction(circle_func, t_range=[temp_valor_inicial, k.get_value()]))
             
-            self.play(FadeIn(circunferencia_path))
             
-            self.play(k.animate.set_value(temp_valor_inicial + 2*PI), rate_func = linear, run_time = 4)
             
-            self.play(FadeOut(circunferencia_path))
             
-            self.wait()
+            self.wait(2)
+            
+            # endregion
             
 
 class Basico(ThreeDScene):
