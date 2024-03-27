@@ -1,2 +1,9 @@
 # This file is used internally by FFMPEG.
-file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/3403513695_66111383_3169024153.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/3403513695_3059830020_418599982.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_2432700729_2706638000.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_2401562167_1811300130.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_66111383_1068839093.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_1850906296_2153412010.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_4205520711_4070458524.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_561559012_1260527881.mp4'
+file 'file:/home/gabriel/qiskit/Quantum-Computing/Video/Video IC/media/videos/QuantumComputing/1080p60/partial_movie_files/Scene3D/2361184997_66111383_4002165354.mp4'

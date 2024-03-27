@@ -47,7 +47,7 @@ class Scene2(Scene):
     
     def construct(self):
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -87,7 +87,7 @@ class Scene2(Scene):
 
         # endregion
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -117,7 +117,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -185,7 +185,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -282,7 +282,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = True)
+        self.next_section(skip_animations = False)
         
         # region MyRegion
         
@@ -492,7 +492,7 @@ class Scene3D(ThreeDScene):
             # region MyRegion
     
             self.camera.background_color = "#ffffff"
-        
+            
             titulo = Text("Esfera de Bloch", font_size = 60).set_color(BLACK).to_edge(UP, buff = 0.8)
         
             myTemplate = TexTemplate()
@@ -500,88 +500,56 @@ class Scene3D(ThreeDScene):
     
             formula_final = MathTex(r"\ket{\psi}",r"=",r"\cos{\frac{\theta}{2}}",r"\ket{0}",r"+",r"e^{i\phi}\sin{\frac{\theta}{2}}",r"\ket{1}", color = BLACK, font_size = 60, tex_template=myTemplate)
             
-            self.add(titulo, formula_final)
+            self.add_fixed_in_frame_mobjects(titulo, formula_final)
             
+            self.play(formula_final.animate.scale(0.8).to_edge(RIGHT, buff = 0.8), run_time = 2)
+        
+            axes = ThreeDAxes(x_range = (-4, 4, 1), y_range = (-4, 4, 1), z_range = (-4, 4, 1), x_length = 4, y_length = 4, z_length = 6, axis_config = {"color": BLACK, "include_tip": True, "tip_height": (temp_valor := 0.26), "tip_width" : temp_valor})
             
+            sphere = Sphere(radius=1.4, resolution = (24, 48), stroke_opacity=0).set_fill(color=GRAY, opacity=0.3)
             
+            vgroup_sphere = VGroup(axes, sphere).to_edge(LEFT, buff = 1.75).shift(0.6*DOWN)
             
+            label1 = MathTex(r"\ket{0}", color = BLACK, font_size = (temp_size:=40), tex_template=myTemplate).next_to(axes, UP, buff = 0.5)
+            label2 = MathTex(r"\ket{1}", color = BLACK, font_size = temp_size, tex_template=myTemplate).next_to(axes, DOWN, buff = 0.5)
+            label3 = MathTex(r"\ket{+}", color = BLACK, font_size = temp_size, tex_template=myTemplate).next_to(axes, RIGHT, buff = 0.5)
+            label4 = MathTex(r"\ket{-}", color = BLACK, font_size = temp_size, tex_template=myTemplate).next_to(axes, LEFT, buff = 0.5)
+            label5 = MathTex(r"\ket{+i}", color = BLACK, font_size = temp_size, tex_template=myTemplate).next_to(axes, OUT, buff = 1)
+            label6 = MathTex(r"\ket{-i}", color = BLACK, font_size = temp_size, tex_template=myTemplate).next_to(axes, IN, buff = 1)
+
+            vgroup_total = VGroup(vgroup_sphere, label1, label2, label3, label4, label5, label6).rotate(-20 * DEGREES, axis=UP).rotate(-15 * DEGREES, axis=LEFT)
+
+            self.renderer.camera.light_source.move_to(3*OUT)
+
+            self.play(Write(vgroup_sphere), run_time = 1)
+
+            vgroup_sphere_label = VGroup(label1, label2, label3, label4, label5, label6)
             
+            for a in vgroup_sphere_label:
+                
+                a.rotate(15 * DEGREES, axis=LEFT, about_point=a.get_center()).rotate(20 * DEGREES, axis=UP, about_point=a.get_center())
+                
+                pass
+            
+            self.play(FadeIn(label1), FadeIn(label2), FadeIn(label3), FadeIn(label4), FadeIn(label5), FadeIn(label6), run_time = 2)
+            
+            self.wait(2)
+            
+            formula_ket_mais = MathTex(r"\ket{\psi}",r"=",r"\frac{1}{\sqrt{2}}",r"\ket{0}",r"+",r"\frac{1}{\sqrt{2}}",r"\ket{1}", color = BLACK, font_size = 60, tex_template=myTemplate).next_to(formula_final, DOWN, buff=1).scale(0.8)
+            
+            arrow_ket_mais = Arrow3D(start = axes.get_origin(),  end = axes.coords_to_point(3.1, 0, 0), color = "#6087cf")
+            
+            self.play(AnimationGroup(Write(formula_ket_mais), FadeIn(arrow_ket_mais), lag_ratio = 1), run_time = 3)
+            
+            self.wait(1)
+            
+            rotation_axis = UP
+            rotation_axis = rotate_vector(rotation_axis, -20 * DEGREES, UP)
+            rotation_axis = rotate_vector(rotation_axis, -15 * DEGREES, LEFT)
+            
+            self.play(AnimationGroup(TransformMatchingTex(formula_ket_mais, (formula_ket_mais := MathTex(r"\ket{\psi}",r"=",r"\frac{1}{\sqrt{2}}",r"\ket{0}",r"-",r"\frac{1}{\sqrt{2}}",r"\ket{1}", color = BLACK, font_size = 60, tex_template=myTemplate).next_to(formula_final, DOWN, buff=1).scale(0.8))), arrow_ket_mais.animate.rotate(-179 * DEGREES, axis=rotation_axis,about_point=axes.get_origin()) , lag_ratio=0.7), run_time = 3)
             
             self.wait(2)
             
             # endregion
             
-
-class Basico(ThreeDScene):
-    
-    def construct(self):
-        
-        self.set_camera_orientation(phi=75*DEGREES, theta=0)
-
-        axis = ThreeDAxes().scale(0.5)
-        sphere = Sphere().set_fill(BLACK)
-        arrow = Arrow().put_start_and_end_on(ORIGIN, UP).set_fill(RED).set_stroke(RED)
-        arrow.rotate(axis=RIGHT, angle=PI/2, about_point=ORIGIN)
-
-        ket_0 = Text(r"$\ket{0}$").next_to(axis, np.array([0,0,1]))
-        ket_1 = Text(r"$\ket{1}$").next_to(axis, -np.array([0,0,1]))
-        ket_p = Text(r"$\ket{+}$").next_to(axis, RIGHT)
-        ket_m = Text(r"$\ket{-}$").next_to(axis, LEFT)
-        ket_pi = Text(r"$\ket{+i}$").next_to(axis, UP)
-        ket_mi = Text(r"$\ket{-i}$").next_to(axis, DOWN)
-        axis_name_group = VGroup(ket_0, ket_1, ket_p, ket_m, ket_pi, ket_mi)
-        
-        qubit = Text(r"$\alpha \ket{0} + \beta \ket{1}$")
-        
-        gate_list = [Text(r'H').to_corner(UP),
-                  Text(r'$R_z(\frac{\pi}{2})$').to_corner(UP),
-                  Text(r'$R_x(\frac{\pi}{2})$').to_corner(UP),
-                  Text(r'$R_y(\frac{\pi}{2})$').to_corner(UP)]
-        
-        rotation_list = [(PI, [1,0,1]),
-                 (PI/2, [0,0,1]),
-                 (PI/2, [1,0,0]),
-                 (PI/2, [0,1,0])]
-                 
-        
-        #self.set_camera_orientation(phi=75*DEGREES, theta=0)
-        #self.set_camera_orientation(phi=75 * DEGREES, theta=-45 * DEGREES)
-        self.wait()
-        self.play(FadeIn(axis))
-        
-        self.begin_ambient_camera_rotation(rate = 0.05)
-        
-        self.add_fixed_orientation_mobjects(ket_0, ket_1, ket_p, ket_m, ket_pi, ket_mi)
-        self.play(FadeIn(axis_name_group),
-              FadeIn(sphere),
-              FadeIn(arrow))
-        
-        i = 0
-        i_last = len(gate_list)
-        self.add_fixed_in_frame_mobjects(gate_list[0])
-        self.play(Write(gate_list[0]),
-              Rotate(arrow, 
-                 about_point=ORIGIN,
-                 angle=rotation_list[i][0], 
-                 axis=np.array(rotation_list[i][1])))
-        
-        i += 1
-        while i < i_last:
-            self.add_fixed_in_frame_mobjects(gate_list[i])
-            self.play(FadeOut(gate_list[i-1]),
-                      FadeIn(gate_list[i]),
-                      Rotate(arrow, 
-                             about_point=ORIGIN,
-                             angle=rotation_list[i][0], 
-                             axis=np.array(rotation_list[i][1])))
-            i += 1
-        
-        self.play(Uncreate(gate_list[-1]),
-                  Uncreate(axis_name_group),
-                  Uncreate(axis),
-                  Uncreate(sphere),
-                  Uncreate(arrow))
-        self.stop_ambient_camera_rotation()
-        self.wait()
-    
-        pass
