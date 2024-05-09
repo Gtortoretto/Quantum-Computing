@@ -22,7 +22,7 @@ class Intro(Scene):
         
         title_sub = Text("Introdução ", font_size = 60).to_edge(LEFT, buff = 0.8)
         
-        title_info = VGroup(Text("Gabriel Fabian Tortoretto", font_size = 30, fill_opacity=0.5), Text("13/03/2024", font_size = 20, fill_opacity=0.5)).arrange(DOWN).shift(2.5*DOWN)
+        title_info = VGroup(Text("Grupo QuantumComputing - SAMPA", font_size = 30, fill_opacity=0.5), Text("13/03/2024", font_size = 20, fill_opacity=0.5)).arrange(DOWN).shift(2.5*DOWN)
         
         self.play(FadeIn(lateral_bar), Transform(title, title_sub), FadeIn(trans_title), FadeIn(title_info))
         #self.play(FadeIn(trans_title))
@@ -47,7 +47,7 @@ class Scene2(Scene):
     
     def construct(self):
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -117,7 +117,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
@@ -282,7 +282,7 @@ class Scene2(Scene):
         
         # endregion
         
-        self.next_section(skip_animations = False)
+        self.next_section(skip_animations = True)
         
         # region MyRegion
         
