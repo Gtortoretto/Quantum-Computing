@@ -1,4 +1,3 @@
-# %%
 #Python Default 
 
 import warnings
@@ -80,20 +79,10 @@ from braket.tracking import Tracker
 from qiskit_braket_provider import *
 
 
-%matplotlib widget
-
-# %%
 provider = BraketProvider()
 local_simulator = BraketLocalBackend()
-sv1_simualtor = provider.get_backend("SV1")
+#sv1_simualtor = provider.get_backend("SV1")
 
-# %%
-service = QiskitRuntimeService()
-backend = service.backend("ibm_brisbane")
-noise_model = NoiseModel.from_backend(backend)
-coupling_map = backend.configuration().coupling_map
-
-# %%
 driver = PySCFDriver(
     atom= f"H 0 0 0; H 0 0 1",
     basis="sto3g",
@@ -104,10 +93,7 @@ driver = PySCFDriver(
 
 es_problem = driver.run()
 
-#estimator = Estimator(backend = local_simulator, options={"shots" : 2000, "noise_model" : noise_model, "coupling_map" : coupling_map})
-
 estimator = Estimator(backend = local_simulator)
-
 
 mapper = JordanWignerMapper()
 
@@ -130,34 +116,8 @@ calc = GroundStateEigensolver(mapper, vqe_solver)
 
 minimum_eigenvalue = vqe_solver.compute_minimum_eigenvalue(calc.get_qubit_operators(es_problem)[0])
 
-res = calc.solve(es_problem)
-
-resultado_final = res.groundenergy
-
-# %%
 circuito = transpile(minimum_eigenvalue.optimal_circuit.decompose().assign_parameters(minimum_eigenvalue.optimal_parameters), local_simulator)
 
-circuito.draw(output = "mpl")  
-
-# %%
-gates = []
-
-for i, (gate, qubits, etc) in enumerate(circuito.data):
-    
-    gates.append(gate.name)
-
-set_gates = list(set(gates))
-
-set_gates.sort(key = lambda x: gates.count(x), reverse = True)
-
-print("Gates present: " + " ".join(set_gates), end = "\n\n")
-print(f"Number of gates: {len(gates)}\n\nDistribution of gates: \n")
-
-for i in set_gates:
-    
-    print(i, gates.count(i))
-
-# %%
 def clifford_gate():
 
    random_value = random.randint(0, 3)
@@ -228,7 +188,7 @@ def check (original, target, driver, difference_percentage = 0.1):
 
 def modelo_1(original_circuit, number_of_circuits, driver, percentage_of_changed_gates = 0.3, difference_percentage = 0.5, do_check = True):
    
-   for i in range(number_of_circuits):
+   for index in range(number_of_circuits):
       
       new_circuit = subs_ncg(original_circuit, percentage_of_changed_gates)
       
@@ -240,29 +200,7 @@ def modelo_1(original_circuit, number_of_circuits, driver, percentage_of_changed
          
          yield new_circuit
          
-   
 
-# %%
-circuitos_similares = list(modelo_1(circuito, 100, es_problem, do_check=False))
+circuitos_similares = list(modelo_1(circuito, 10, es_problem, do_check=False))
 
 print(circuitos_similares)
-
-# %%
-for i in a:
-        
-    print(run_statevector(i, es_problem))
-
-# %%
-circuito_teste = subs_ncg(circuito, 0.1)
-
-expectation_value_teste_statevector = run_statevector(circuito_teste, es_problem)
-
-expectation_value_teste_estimator = run_estimator(circuito_teste, es_problem, local_simulator)
-
-expectation_value_teste_statevector, expectation_value_teste_estimator
-
-# %%
-for i, (gate, qubits, etc) in enumerate(circuito.data):
-    print(gate.name, qubits)
-
-
