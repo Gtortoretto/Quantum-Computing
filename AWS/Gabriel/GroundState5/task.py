@@ -1,3 +1,5 @@
+# region : Setup
+
 #Python Default 
 
 import warnings
@@ -549,10 +551,65 @@ def modelo_4(original_circuit, number_of_circuits, driver, percentage_of_changed
             number_of_circuits -= 1
             yield new_circuit
 
+# endregion
+
+# region : Modelo 1
 
 
 
+# endregion
+
+# region : Modelo 2
+
+modelo = modelo_2(circuito_ibm, 100, es_problem, percentage_of_changed_gates = 0.3, difference_percentage = 0.3, do_check=True, estimator_name = "estimator_aer", shots = None, seed = 1)
+
+circuitos_similares_ibm = []
+
+time_total, start_time = time.time(), time.time()
+
+for index, i in enumerate(modelo):
+
+    end_time = time.time() - start_time
+
+    circuitos_similares_ibm.append(i)
+    print(f"Iteração {index}: {end_time}s")
+
+    start_time = time.time()
+    
+print(f"Tempo total: {time.time() - time_total}")
+
+circuitos_similares_ibm_resultados = []
+
+time_total, start_time = time.time(), time.time()
+
+for index, i in enumerate(circuitos_similares_ibm):
+
+    end_time = time.time() - start_time
+    
+    circuitos_similares_ibm_resultados.append([i[0], run_estimator_aer_noise(i[0], es_problem, shots = 2000, seed = 1, noise_model = noise_model)])
+    
+    print(f"Iteração {index}: {end_time}s")
+
+    start_time = time.time()
+    
+print(f"Tempo total: {time.time() - time_total}")
+
+modelo2_brisbane_3030_aer_100 = circuitos_similares_ibm
+modelo2_brisbane_3030_simulator_100 = circuitos_similares_ibm_resultados
+
+salvar("modelo3_brisbane_3030_aer_100")
+salvar("modelo3_brisbane_3030_simulator_100")
+
+# endregion
+
+# region : Modelo 3
 
 
 
+# endregion
 
+# region : Modelo 4
+
+
+
+# endregion
