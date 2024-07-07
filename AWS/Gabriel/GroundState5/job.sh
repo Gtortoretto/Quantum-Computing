@@ -5,11 +5,9 @@
 #SBATCH --cpus-per-task=1              # Number of cores per task, assuming single-threaded
 #SBATCH --nodes=1                      # Number of nodes, only 1 needed
 #SBATCH --mem-per-cpu=600mb            # Adjust memory as needed for your script
-#SBATCH --time=00:05:00                # Adjust wall time as needed
+#SBATCH --time=10:05:00                # Adjust wall time as needed
 #SBATCH --output=log/job_%j.out
 #SBATCH --error=log/job_%j.err
-
-mkdir -p log
 
 # module load python/3.12.4
 

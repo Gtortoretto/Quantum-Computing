@@ -561,7 +561,7 @@ def modelo_4(original_circuit, number_of_circuits, driver, percentage_of_changed
 
 # region : Modelo 2
 
-modelo = modelo_2(circuito_ibm, 100, es_problem, percentage_of_changed_gates = 0.3, difference_percentage = 0.3, do_check=True, estimator_name = "estimator_aer", shots = None, seed = 1)
+modelo = modelo_2(circuito_ibm, 2500, es_problem, percentage_of_changed_gates = 0.3, difference_percentage = 0.3, do_check=True, estimator_name = "estimator_aer", shots = None, seed = 1)
 
 circuitos_similares_ibm = []
 
@@ -594,11 +594,11 @@ for index, i in enumerate(circuitos_similares_ibm):
     
 print(f"Tempo total: {time.time() - time_total}")
 
-modelo2_brisbane_3030_aer_100 = circuitos_similares_ibm
-modelo2_brisbane_3030_simulator_100 = circuitos_similares_ibm_resultados
+modelo2_brisbane_3030_aer_2500 = circuitos_similares_ibm
+modelo2_brisbane_3030_simulator_2500 = circuitos_similares_ibm_resultados
 
-salvar("modelo3_brisbane_3030_aer_100")
-salvar("modelo3_brisbane_3030_simulator_100")
+salvar("modelo2_brisbane_3030_aer_2500")
+salvar("modelo2_brisbane_3030_simulator_2500")
 
 # endregion
 
