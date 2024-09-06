@@ -104,7 +104,6 @@ provider = BraketProvider()
 local_simulator = BraketLocalBackend()
 sv1 = provider.get_backend("SV1")
 aria = provider.get_backend("Aria 1")
-harmony = provider.get_backend("Harmony")
 statevector_simulator = StatevectorSimulator()
 
 
