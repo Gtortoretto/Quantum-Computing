@@ -5,7 +5,7 @@ import warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 import pickle
-import time
+import time as time_module
 import random
 import os
 import inspect
@@ -41,6 +41,9 @@ from qiskit.quantum_info import Statevector
 from qiskit import QuantumCircuit
 from qiskit_aer import StatevectorSimulator
 import qiskit_aer
+from qiskit_nature.second_q.transformers import ActiveSpaceTransformer
+from qiskit_algorithms import AdaptVQE
+from qiskit.quantum_info import SparsePauliOp, Pauli
 
 ## Qiskit Nature
     
