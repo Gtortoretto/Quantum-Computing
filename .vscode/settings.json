@@ -6,6 +6,7 @@
     "files.exclude": {
         "**/__**": true,
         "**/.gitignore": true,
+        "**/.gitkeep": true,
         "**/.vscode": true
     }
 }
