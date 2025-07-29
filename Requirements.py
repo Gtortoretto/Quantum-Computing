@@ -104,10 +104,9 @@ from mitiq import zne
 #%matplotlib inline
 
 class Quantum_Estimator:
-    
+
+
     def 
-
-
 
 
 
