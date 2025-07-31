@@ -75,6 +75,9 @@ from qiskit.primitives import Estimator as Estimator_Nature # Estimator Deprecat
 
 from qiskit_aer.primitives.estimator import Estimator as Estimator_Aer
 
+from qiskit_aer.primitives.estimator import EstimatorV2 as Estimator_AerV2
+
+
 from qiskit_ibm_runtime import Estimator 
 
 from qiskit_ibm_runtime import EstimatorV2
@@ -103,10 +106,70 @@ from mitiq import zne
 
 #%matplotlib inline
 
+plt.style.use('dark_background')
+
+plt.rcParams.update({
+    'figure.facecolor':   '#282c34',  
+    'axes.facecolor':     '#1e1e1e',    
+    'grid.color':         '#444444',
+
+    'figure.figsize': (10, 6),
+    'figure.dpi': 150
+})    
+
 class Quantum_Estimator:
 
 
-    def 
+    def __init__(self, circuit, observable = None, driver = None, mapper = None):
+
+        self.circuit = circuit
+        self.results = {}
+        
+        if observable is not None:
+            
+            self.observable = observable
+            self.problem_type = "Classic"
+            
+        elif all(a is not None for a in (driver, mapper)):
+            
+            self.observable = mapper.map(driver.second_q_ops()[0])
+            self.problem_type = "Molecule"
+        
+        else: 
+            
+            raise ValueError("Observable missing or Driver and Mapper missing.")
+        
+        self._fix_circuit_qubits()
+    
+    def _fix_circuit_qubits(self):
+
+        num_qubits_observable = self.observable.num_qubits
+        num_qubits_circuit = self.circuit.num_qubits
+        
+        if num_qubits_observable != num_qubits_circuit:
+            
+            new_circuit = QuantumCircuit(num_qubits_observable)
+
+            for instruction in self.circuit.data:
+                qubit_indices = [self.circuit.qubits.index(q) for q in instruction.qargs]
+                
+                if all(i < num_qubits_observable for i in qubit_indices):
+                    new_circuit.append(instruction.operation, qubit_indices)
+            
+            self.circuit = new_circuit
+    
+    def run_statevector(self):
+
+        state = Statevector.from_instruction(self.circuit)
+        
+        expectation_value = state.expectation_value(self.observable).real
+        
+        self.results['Exact'] = expectation_value 
+        
+        return expectation_value
+            
+        
+        
 
 
 
