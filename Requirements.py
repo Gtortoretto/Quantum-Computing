@@ -4,107 +4,36 @@ import warnings
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
-import pickle
-import time as time_module
+import time
 import random
+import pickle
 import os
-import inspect
-import pathlib
-import math
-
-#Essentials
-
 import IPython
-import numpy as np
-from bs4 import BeautifulSoup
-import requests
-import func_timeout
-import pandas as pd
-from itables import show
-from scipy.optimize import curve_fit
-from scipy import optimize
-
-#from objproxies import *
+import pprint
+from tqdm.notebook import tqdm
+from math import *
 
 import matplotlib.pyplot as plt
+import numpy as np
 
-#Qiskit
 
-import qiskit
-from qiskit.circuit import Gate
-from qiskit.circuit.library import *
+# Qiskit
+
+from qiskit import QuantumCircuit, schedule
+from qiskit.circuit import *
+from qiskit.primitives import BackendEstimator
+from qiskit.primitives import StatevectorEstimator, StatevectorSampler
+from qiskit.quantum_info import SparsePauliOp
+from qiskit.providers.basic_provider import BasicSimulator
 from qiskit import transpile
-from qiskit.providers.models import *
-from qiskit_ibm_runtime.fake_provider import *
-from qiskit.providers.fake_provider import *
-from qiskit.quantum_info import Statevector
-from qiskit import QuantumCircuit
-from qiskit_aer import StatevectorSimulator
-import qiskit_aer
-from qiskit_nature.second_q.transformers import ActiveSpaceTransformer
-from qiskit_algorithms import AdaptVQE
-from qiskit.quantum_info import SparsePauliOp, Pauli
+from qiskit.visualization import plot_histogram, plot_distribution
+from qiskit.circuit.random import random_circuit
 
-## Qiskit Nature
-    
-from qiskit_nature.units import *   #ANGSTROM
+from qiskit_aer import *
+from qiskit_aer.primitives import Estimator as Aer_EstimatorV1, EstimatorV2 as Aer_EstimatorV2
 
-from qiskit_nature.second_q.drivers import *    #PySCFDriver
+from qiskit_ibm_runtime import SamplerV2 as runtime_SamplerV2, EstimatorV2 as runtime_EstimatorV2, QiskitRuntimeService
 
-from qiskit_nature.second_q.mappers import * #JordanWignerMapper
-
-from qiskit_nature.second_q.algorithms import GroundStateEigensolver
-
-from qiskit_nature.second_q.problems import ElectronicStructureProblem
-from qiskit_nature.second_q.problems import EigenstateResult
-
-from qiskit_nature.second_q.circuit.library import *  #Ansatz, HF
-
-
-## Qiskit Algorithms
-    
-from qiskit_algorithms.minimum_eigensolvers import VQE as  VQE_algorithms   #VQE
- 
-from qiskit_algorithms.optimizers import *    #SLSQP
-
-from qiskit.circuit.library import EfficientSU2   #EfficientSU2
-
-## Qiskit Estimators
-
-from qiskit.primitives import Estimator as Estimator_Nature # Estimator Deprecating
-
-from qiskit_aer.primitives.estimator import Estimator as Estimator_Aer
-
-from qiskit_aer.primitives.estimator import EstimatorV2 as Estimator_AerV2
-
-
-from qiskit_ibm_runtime import Estimator 
-
-from qiskit_ibm_runtime import EstimatorV2
-
-## Qiskit Noise Models
-
-from qiskit_aer.noise import NoiseModel
-
-from qiskit.providers.fake_provider import *
-
-##Qiskit Runtime IBM
-
-from qiskit_ibm_runtime import QiskitRuntimeService, Session, Options, Batch
-
-## Braket
-
-from braket.tracking import Tracker
-from qiskit_braket_provider import *
-from braket.aws import AwsDevice
-from braket.devices import Devices
-from braket.aws import AwsDevice, AwsQuantumTask
-
-## Mitiq 
-
-from mitiq import zne
-
-#%matplotlib inline
 
 plt.style.use('dark_background')
 
@@ -116,6 +45,54 @@ plt.rcParams.update({
     'figure.figsize': (10, 6),
     'figure.dpi': 150
 })    
+
+def get_current_directory():
+    try:
+        
+        directory = os.path.dirname(os.path.abspath(__file__))
+
+    except:
+        
+        ip = IPython.get_ipython()
+        directory = None
+        if '__vsc_ipynb_file__' in ip.user_ns:
+            directory = os.path.dirname(ip.user_ns['__vsc_ipynb_file__'])
+        
+    return directory 
+
+def salvar(a):
+    
+    script_dir = get_current_directory()
+    
+    dados_dir = os.path.join(script_dir, 'dados')
+    
+    os.makedirs(dados_dir, exist_ok=True)
+    
+    file_path = os.path.join(dados_dir, f'{a}.pickle')
+    
+    with open(file_path, 'wb') as f:
+        pickle.dump(eval(a), f)
+        
+        
+def abrir(a):
+    
+    script_dir = get_current_directory()
+    
+    file_path = os.path.join(script_dir, 'dados', f'{a}.pickle')
+    
+    with open(file_path, 'rb') as f:
+        return pickle.load(f)
+
+    
+def salvar_obj(obj, filename):
+    script_dir = get_current_directory()
+    dados_dir = os.path.join(script_dir, 'dados')
+    os.makedirs(dados_dir, exist_ok=True)
+    
+    file_path = os.path.join(dados_dir, f'{filename}.pickle')
+    
+    with open(file_path, 'wb') as f:
+        pickle.dump(obj, f)
 
 class Quantum_Estimator:
 
@@ -158,15 +135,7 @@ class Quantum_Estimator:
             
             self.circuit = new_circuit
     
-    def run_statevector(self):
 
-        state = Statevector.from_instruction(self.circuit)
-        
-        expectation_value = state.expectation_value(self.observable).real
-        
-        self.results['Exact'] = expectation_value 
-        
-        return expectation_value
             
         
         
