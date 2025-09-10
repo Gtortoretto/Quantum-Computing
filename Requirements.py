@@ -16,7 +16,7 @@ from tabulate import tabulate
 
 import matplotlib.pyplot as plt
 import numpy as np
-
+from scipy.optimize import curve_fit
 
 # Qiskit
 
@@ -29,7 +29,7 @@ from qiskit import transpile
 from qiskit.visualization import plot_histogram, plot_distribution
 from qiskit.circuit.random import random_circuit
 from qiskit.circuit.library import *
-from qiskit.quantum_info import Operator, Statevector, DensityMatrix
+from qiskit.quantum_info import Operator, Statevector, DensityMatrix, SparsePauliOp
 from qiskit.converters import *
 
 from qiskit.providers.fake_provider import *
