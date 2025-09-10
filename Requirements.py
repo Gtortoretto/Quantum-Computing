@@ -23,11 +23,13 @@ from qiskit import QuantumCircuit, schedule
 from qiskit.circuit import *
 from qiskit.primitives import BackendEstimator
 from qiskit.primitives import StatevectorEstimator, StatevectorSampler
-from qiskit.quantum_info import SparsePauliOp
 from qiskit.providers.basic_provider import BasicSimulator
 from qiskit import transpile
 from qiskit.visualization import plot_histogram, plot_distribution
 from qiskit.circuit.random import random_circuit
+from qiskit.circuit.library import *
+from qiskit.quantum_info import *
+from qiskit.converters import *
 
 from qiskit_aer import *
 from qiskit_aer.primitives import Estimator as Aer_EstimatorV1, EstimatorV2 as Aer_EstimatorV2
