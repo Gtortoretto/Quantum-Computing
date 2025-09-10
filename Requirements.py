@@ -12,6 +12,7 @@ import IPython
 import pprint
 from tqdm.notebook import tqdm
 from math import *
+from tabulate import tabulate
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,6 +31,9 @@ from qiskit.circuit.random import random_circuit
 from qiskit.circuit.library import *
 from qiskit.quantum_info import Operator, Statevector, DensityMatrix
 from qiskit.converters import *
+
+from qiskit.providers.fake_provider import *
+from qiskit_aer.noise import *
 
 from qiskit_aer import *
 from qiskit_aer.primitives import Estimator as Aer_EstimatorV1, EstimatorV2 as Aer_EstimatorV2
