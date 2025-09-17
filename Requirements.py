@@ -29,7 +29,7 @@ from qiskit import transpile
 from qiskit.visualization import plot_histogram, plot_distribution
 from qiskit.circuit.random import random_circuit
 from qiskit.circuit.library import *
-from qiskit.quantum_info import Operator, Statevector, DensityMatrix, SparsePauliOp
+from qiskit.quantum_info import Operator, Statevector, DensityMatrix, SparsePauliOp, random_statevector
 from qiskit.converters import *
 
 from qiskit.providers.fake_provider import *
@@ -140,6 +140,9 @@ class Quantum_Estimator:
                     new_circuit.append(instruction.operation, qubit_indices)
             
             self.circuit = new_circuit
+            
+            
+            
     
 
             
