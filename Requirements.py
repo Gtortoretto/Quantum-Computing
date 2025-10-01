@@ -13,9 +13,11 @@ import pprint
 from tqdm.notebook import tqdm
 from math import *
 from tabulate import tabulate
+from itables import init_notebook_mode
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from scipy.optimize import curve_fit
 
 # Qiskit
@@ -41,6 +43,8 @@ from qiskit_ibm_runtime import SamplerV2 as runtime_SamplerV2, EstimatorV2 as ru
 
 
 plt.style.use('dark_background')
+
+#init_notebook_mode(all_interactive=True)
 
 plt.rcParams.update({
     'figure.facecolor':   '#282c34',  
