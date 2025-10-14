@@ -14,6 +14,7 @@ from tqdm.notebook import tqdm
 from math import *
 from tabulate import tabulate
 from itables import init_notebook_mode
+from itertools import chain
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,9 +23,9 @@ from scipy.optimize import curve_fit
 
 # Qiskit
 
-from qiskit import QuantumCircuit, schedule
+from qiskit import QuantumCircuit
 from qiskit.circuit import *
-from qiskit.primitives import BackendEstimator
+#from qiskit.primitives import BackendEstimator
 from qiskit.primitives import StatevectorEstimator, StatevectorSampler
 from qiskit.providers.basic_provider import BasicSimulator
 from qiskit import transpile
@@ -39,8 +40,7 @@ from qiskit_aer.noise import *
 
 from qiskit_aer import *
 from qiskit_aer.primitives import Estimator as Aer_EstimatorV1, EstimatorV2 as Aer_EstimatorV2
-from qiskit_ibm_runtime import SamplerV2 as runtime_SamplerV2, EstimatorV2 as runtime_EstimatorV2, QiskitRuntimeService
-
+from qiskit_ibm_runtime import SamplerV2, EstimatorV2, QiskitRuntimeService, Batch
 
 plt.style.use('dark_background')
 
